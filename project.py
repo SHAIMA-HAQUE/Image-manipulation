@@ -5,7 +5,7 @@ def main():
     filename = get_file()
     image = SimpleImage(filename)
     image.show()
-    filter = input("Enter the filter you want : Adjust Brightness\nChannel\nGreen-Screening\nTwin\nBorder\nGet RGB\nCyclone Highlight:\n ")
+    filter = input("Enter the filter you want :\n Adjust Brightness\nChannel\nGreen-Screening\nTwin\nRelflect\nBorder\nGet RGB\nCyclone Highlight:\n")
     if filter == "Adjust Brightness":
         bright = adjust_brightness(image)
         bright.show()
@@ -23,6 +23,9 @@ def main():
     elif filter == "Twin":
         twin_image = twin(image)
         twin_image.show()
+    elif filter == "Reflect":
+        reflected_image = reflect(image)
+        reflected_image.show()
     elif filter == "Border":
         border_size = int(input("Enter the border size: "))
         bordered_image = border(image,border_size)
@@ -35,7 +38,8 @@ def main():
     elif filter == "Cyclone Highlight":
         cyclone_image = cyclone(image)
         cyclone_image.show()
-
+    else:
+        print("Invalid choice")
 
 def adjust_brightness(image):
     new_image = image
@@ -92,12 +96,25 @@ def twin(image):
     width = new_image.width
     height = new_image.height
     mirror = SimpleImage.blank(width * 2, height)
-    #Placing the correct pixels in the right order
+    #Placing the  pixels in the right order
     for x in range(width):
         for y in range(height):
             pixel = new_image.get_pixel(x, y)
             mirror.set_pixel(x, y, pixel)
             mirror.set_pixel((width*2)-(x+1), y, pixel)
+    return mirror
+
+def reflect(image):
+    new_image = image
+    width = new_image.width
+    height = new_image.height
+    mirror = SimpleImage.blank(width , height*2)
+    # Placing the  pixels in the right order
+    for x in range(width):
+        for y in range(height):
+            pixel = new_image.get_pixel(x, y)
+            mirror.set_pixel(x, y, pixel)
+            mirror.set_pixel(x,(height * 2) - (y + 1), pixel)
     return mirror
 
 def border(image,border_size):
@@ -161,7 +178,7 @@ def get_rgb(image,x,y):
 
 def cyclone(image):
     for pixel in image:
-        if pixel.red>195 and pixel.green>195 and pixel.blue>195:
+        if pixel.red>190 and pixel.green>190 and pixel.blue>190:
             pixel.green = 0
             pixel.blue = 0
         else:
